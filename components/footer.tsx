@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Github, Linkedin, Mail, Twitter } from "lucide-react";
-import { DottedSurface } from "@/components/ui/dotted-surface";
+import { EtherealShadow } from "@/components/ui/etheral-shadow";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -11,77 +11,113 @@ const navLinks = [
 ];
 
 const socialLinks = [
-  { href: "https://github.com/username", icon: Github, label: "GitHub" },
+  { href: "https://github.com/ShivainSaxena", icon: Github, label: "Github" },
   {
-    href: "https://linkedin.com/in/username",
+    href: "http://www.linkedin.com/in/shivain-saxena",
     icon: Linkedin,
     label: "LinkedIn",
   },
-  { href: "https://twitter.com/username", icon: Twitter, label: "Twitter" },
-  { href: "mailto:your@email.com", icon: Mail, label: "Email" },
+  { href: "mailto:shivainsaxena@gmail.com", icon: Mail, label: "Email" },
 ];
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-border overflow-hidden bg-background-surface min-h-[340px]">
-      {/* Dotted Wave Animation — absolute, behind all content */}
-      <DottedSurface />
+    <footer className="relative overflow-hidden bg-background min-h-[280px] -mt-14 pt-24">
+      {/* Ethereal animated shadow background */}
+      <EtherealShadow
+        color="rgba(59, 130, 246, 0.55)"
+        animation={{ scale: 60, speed: 30 }}
+        noise={{ opacity: 0.4, scale: 1.2 }}
+        sizing="fill"
+      />
 
-      {/* Dark gradient overlay — keeps dots subtle and text legible */}
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-background-surface/90 via-background-surface/50 to-transparent" />
+      <div className="absolute inset-0 pointer-events-none bg-background/20" />
+      <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-background to-transparent z-20 pointer-events-none" />
 
-      {/* Footer Content — sits above animation via z-10 */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-12">
-        <div className="grid md:grid-cols-3 gap-8 items-start">
-          {/* Brand */}
-          <div>
+      {/* ─── Content ─────────────────────────────────────────────── */}
+      <div className="relative z-10 max-w-6xl mx-auto px-8 pt-14 pb-8 h-full flex flex-col justify-between">
+        {/* Top row — name (large) + about blurb */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          {/* Left — big name */}
+          <div className="flex items-start">
             <Link
               href="/"
-              className="font-serif text-xl font-bold text-foreground hover:text-primary transition-colors"
+              className="font-serif text-4xl md:text-5xl font-bold text-foreground hover:text-primary transition-colors leading-none tracking-tight uppercase"
             >
               Shivain Saxena
             </Link>
           </div>
 
-          {/* Navigation */}
-          <nav className="flex flex-col items-center">
-            <ul className="flex gap-8">
-              {navLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-foreground-muted hover:text-primary transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Social Links */}
-          <div className="flex gap-4 md:justify-end">
-            {socialLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 text-foreground-muted hover:text-primary hover:scale-110 transition-all duration-300"
-                aria-label={link.label}
-              >
-                <link.icon className="w-5 h-5" />
-              </a>
-            ))}
+          {/* Right — short about line */}
+          <div className="flex items-start md:justify-end">
+            <div className="max-w-xs">
+              <p className="text-xs font-mono text-foreground-muted/60 tracking-widest uppercase mb-2">
+                About
+              </p>
+              <p className="text-sm text-foreground-muted leading-relaxed">
+                Engineer focused on building elegant, performant, and scalable
+                software.
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Copyright */}
-        {/* <div className="mt-12 pt-8 border-t border-border/50 text-center">
-          <p className="text-sm text-foreground-muted">
-            &copy; {new Date().getFullYear()} Your Name. All rights reserved.
-          </p>
-        </div> */}
+        {/* Divider */}
+        <div className="h-px bg-border/40 mb-8" />
+
+        {/* Bottom row — socials left, nav right */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+          {/* Left — socials */}
+          <div>
+            <p className="text-xs font-mono text-foreground-muted/50 tracking-widest uppercase mb-3">
+              Socials
+            </p>
+            <div className="flex items-center gap-1 flex-wrap">
+              {socialLinks.map((link, index) => (
+                <span key={link.label} className="flex items-center gap-1">
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-mono text-foreground-muted hover:text-primary transition-colors duration-200 tracking-wide uppercase"
+                    aria-label={link.label}
+                  >
+                    {link.label}
+                  </a>
+                  {index < socialLinks.length - 1 && (
+                    <span className="text-foreground-muted/30 mx-1 text-xs">
+                      ■
+                    </span>
+                  )}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Right — navigation */}
+          <div className="md:text-right">
+            <p className="text-xs font-mono text-foreground-muted/50 tracking-widest uppercase mb-3">
+              Navigation
+            </p>
+            <div className="flex items-center gap-1 md:justify-end flex-wrap">
+              {navLinks.map((link, index) => (
+                <span key={link.href} className="flex items-center gap-1">
+                  <Link
+                    href={link.href}
+                    className="text-sm font-mono text-foreground-muted hover:text-primary transition-colors duration-200 tracking-wide uppercase"
+                  >
+                    {link.label}
+                  </Link>
+                  {index < navLinks.length - 1 && (
+                    <span className="text-foreground-muted/30 mx-1 text-xs">
+                      ■
+                    </span>
+                  )}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </footer>
   );
