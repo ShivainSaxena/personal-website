@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
 
 // ─── GLSL Shaders ─────────────────────────────────────────────────────────────
 
@@ -16,8 +15,6 @@ const fragmentShader = `
   precision mediump float;
   uniform float u_time;
   uniform vec2 u_resolution;
-  uniform vec2 u_mouse;
-  uniform float u_intensity;
   
   vec3 hash3(vec2 p) {
     vec3 q = vec3(dot(p, vec2(127.1, 311.7)), 
@@ -150,17 +147,9 @@ const fragmentShader = `
     float pulse1 = sin(time * 3.0 + st.y * 6.0) * 0.5 + 0.5;
     float pulse2 = sin(time * 4.5 - st.y * 8.0) * 0.5 + 0.5;
     float energyPulse = smoothstep(0.3, 0.7, pulse1 * pulse2);
+    // Fixed intensity — no mouse influence
     float intensity = finalShape * combinedStreaks * (1.0 + energyPulse * 0.4);
     intensity *= (1.0 + cells * 0.2);
-    intensity *= u_intensity;
-    vec2 mouse = u_mouse / u_resolution.xy;
-    mouse = (mouse - 0.5) * 2.0;
-    mouse.x *= u_resolution.x / u_resolution.y;
-    float mouseInfluence = 1.0 - length(st - mouse) * 0.6;
-    mouseInfluence = max(0.0, mouseInfluence);
-    mouseInfluence = smoothstep(0.0, 1.0, mouseInfluence);
-    intensity += mouseInfluence * 0.6;
-    aberrationColor = mix(aberrationColor, color1, 0.3);
     vec3 result = aberrationColor * intensity;
     float bloom = smoothstep(0.4, 1.0, intensity) * 0.54;
     result += bloom * finalColor;
@@ -215,9 +204,6 @@ function FallbackBackground() {
 
 export default function WebGLBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  // A 1px tall sentinel pinned to the BOTTOM edge of the hero.
-  // The instant this pixel scrolls off the top of the viewport,
-  // isIntersecting becomes false — which is exactly one vh of scroll.
   const sentinelRef = useRef<HTMLDivElement>(null);
   const glRef = useRef<WebGLRenderingContext | null>(null);
   const programRef = useRef<WebGLProgram | null>(null);
@@ -225,14 +211,10 @@ export default function WebGLBackground() {
   const positionLocationRef = useRef<number>(0);
   const timeLocationRef = useRef<WebGLUniformLocation | null>(null);
   const resolutionLocationRef = useRef<WebGLUniformLocation | null>(null);
-  const mouseLocationRef = useRef<WebGLUniformLocation | null>(null);
-  const intensityLocationRef = useRef<WebGLUniformLocation | null>(null);
   const startTimeRef = useRef<number>(Date.now());
-  const mouseRef = useRef({ x: 0, y: 0 });
   const rafRef = useRef<number | null>(null);
   const isVisibleRef = useRef(true);
 
-  const [globalIntensity, setGlobalIntensity] = useState(1.0);
   const [webglSupported, setWebglSupported] = useState(true);
   const [heroVisible, setHeroVisible] = useState(true);
 
@@ -292,11 +274,6 @@ export default function WebGLBackground() {
       program,
       "u_resolution",
     );
-    mouseLocationRef.current = gl.getUniformLocation(program, "u_mouse");
-    intensityLocationRef.current = gl.getUniformLocation(
-      program,
-      "u_intensity",
-    );
 
     const resizeCanvas = () => {
       const rect = canvas.getBoundingClientRect();
@@ -307,41 +284,7 @@ export default function WebGLBackground() {
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouseRef.current.x = (e.clientX - rect.left) * window.devicePixelRatio;
-      mouseRef.current.y =
-        (rect.height - (e.clientY - rect.top)) * window.devicePixelRatio;
-      gsap.to(
-        { intensity: globalIntensity },
-        {
-          intensity: 1.15,
-          duration: 0.3,
-          ease: "power2.out",
-          onUpdate: function () {
-            setGlobalIntensity(this.targets()[0].intensity);
-          },
-        },
-      );
-      gsap.to(
-        { intensity: 1.15 },
-        {
-          intensity: 1.0,
-          duration: 1.0,
-          delay: 0.1,
-          ease: "power2.out",
-          onUpdate: function () {
-            setGlobalIntensity(this.targets()[0].intensity);
-          },
-        },
-      );
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      window.removeEventListener("resize", resizeCanvas);
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
+    return () => window.removeEventListener("resize", resizeCanvas);
   }, []);
 
   // ── Animation loop ─────────────────────────────────────────────────────────
@@ -350,23 +293,15 @@ export default function WebGLBackground() {
     const loop = () => {
       rafRef.current = requestAnimationFrame(loop);
       if (!isVisibleRef.current) return;
+
       const gl = glRef.current;
       const program = programRef.current;
       const buffer = bufferRef.current;
       const timeLocation = timeLocationRef.current;
       const resolutionLocation = resolutionLocationRef.current;
-      const mouseLocation = mouseLocationRef.current;
-      const intensityLocation = intensityLocationRef.current;
-      if (
-        !gl ||
-        !program ||
-        !buffer ||
-        !timeLocation ||
-        !resolutionLocation ||
-        !mouseLocation ||
-        !intensityLocation
-      )
+      if (!gl || !program || !buffer || !timeLocation || !resolutionLocation)
         return;
+
       const time = (Date.now() - startTimeRef.current) * 0.001;
       gl.useProgram(program);
       gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -381,15 +316,14 @@ export default function WebGLBackground() {
       );
       gl.uniform1f(timeLocation, time);
       gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
-      gl.uniform2f(mouseLocation, mouseRef.current.x, mouseRef.current.y);
-      gl.uniform1f(intensityLocation, globalIntensity);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
+
     rafRef.current = requestAnimationFrame(loop);
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [globalIntensity]);
+  }, []); // no globalIntensity dependency — loop is now stable
 
   // ── Visibility: watch the bottom edge of the hero ──────────────────────────
 
@@ -399,17 +333,11 @@ export default function WebGLBackground() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // entry.isIntersecting is false the moment this 1px div
-        // scrolls past the top of the viewport — i.e. exactly at 1vh scroll.
         const visible = entry.isIntersecting;
         isVisibleRef.current = visible;
         setHeroVisible(visible);
       },
-      {
-        // No rootMargin, threshold 0: fires the instant any part
-        // of the sentinel leaves the viewport.
-        threshold: 0,
-      },
+      { threshold: 0 },
     );
 
     observer.observe(sentinel);
@@ -418,27 +346,20 @@ export default function WebGLBackground() {
 
   return (
     <>
-      {/* SENTINEL — Keep this to pause the animation when off-screen (performance),
-        but we no longer use it to toggle visibility.
-      */}
       <div
         ref={sentinelRef}
         className="absolute bottom-0 left-0 right-0 h-px pointer-events-none"
         aria-hidden="true"
       />
 
-      {/* ABSOLUTE CONTAINER — This is the fix. 
-        Changing from 'fixed' to 'absolute' ensures it stays inside 
-        the Hero's coordinate space and scrolls away.
-      */}
       <div
         className="pointer-events-none"
         style={{
-          position: "absolute", // Changed from fixed to absolute
+          position: "absolute",
           inset: 0,
           zIndex: 0,
           transform: "translateZ(0)",
-          willChange: "transform", // Hint to browser for scroll optimization
+          willChange: "transform",
           contain: "layout style paint",
         }}
       >
