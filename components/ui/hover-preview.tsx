@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { useRef, useState, type ReactNode, type RefObject } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import Image from "next/image"
+import { useRef, useState, type ReactNode, type RefObject } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 export interface PreviewData {
-  image: string
-  title: string
-  subtitle: string
+  image: string;
+  title: string;
+  subtitle: string;
 }
 
 interface HoverLinkProps {
-  children: ReactNode
-  previewKey: string
-  onHoverStart: (key: string, e: React.MouseEvent) => void
-  onHoverMove: (e: React.MouseEvent) => void
-  onHoverEnd: () => void
-  className?: string
+  children: ReactNode;
+  previewKey: string;
+  onHoverStart: (key: string, e: React.MouseEvent) => void;
+  onHoverMove: (e: React.MouseEvent) => void;
+  onHoverEnd: () => void;
+  className?: string;
 }
 
 export function HoverLink({
@@ -36,17 +36,22 @@ export function HoverLink({
     >
       {children}
     </span>
-  )
+  );
 }
 
 interface PreviewCardProps {
-  data: PreviewData | null
-  position: { x: number; y: number }
-  isVisible: boolean
-  cardRef: RefObject<HTMLDivElement | null>
+  data: PreviewData | null;
+  position: { x: number; y: number };
+  isVisible: boolean;
+  cardRef: RefObject<HTMLDivElement | null>;
 }
 
-export function PreviewCard({ data, position, isVisible, cardRef }: PreviewCardProps) {
+export function PreviewCard({
+  data,
+  position,
+  isVisible,
+  cardRef,
+}: PreviewCardProps) {
   return (
     <AnimatePresence>
       {isVisible && data && (
@@ -60,7 +65,7 @@ export function PreviewCard({ data, position, isVisible, cardRef }: PreviewCardP
           style={{
             left: position.x,
             top: position.y,
-            transform: "translate(-50%, -100%)",
+            transform: "translate(-50%, 0%)",
           }}
         >
           <div className="w-64 overflow-hidden rounded-xl border border-border bg-background-surface shadow-2xl">
@@ -69,7 +74,7 @@ export function PreviewCard({ data, position, isVisible, cardRef }: PreviewCardP
                 src={data.image}
                 alt={data.title}
                 fill
-                className="object-cover"
+                className="object-fill"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background-surface/80 to-transparent" />
             </div>
@@ -85,32 +90,32 @@ export function PreviewCard({ data, position, isVisible, cardRef }: PreviewCardP
         </motion.div>
       )}
     </AnimatePresence>
-  )
+  );
 }
 
 export function useHoverPreview(previewData: Record<string, PreviewData>) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const [activePreview, setActivePreview] = useState<PreviewData | null>(null)
-  const [previewPosition, setPreviewPosition] = useState({ x: 0, y: 0 })
-  const [isPreviewVisible, setIsPreviewVisible] = useState(false)
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [activePreview, setActivePreview] = useState<PreviewData | null>(null);
+  const [previewPosition, setPreviewPosition] = useState({ x: 0, y: 0 });
+  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
 
   const handleHoverStart = (key: string, e: React.MouseEvent) => {
-    const data = previewData[key]
+    const data = previewData[key];
     if (data) {
-      setActivePreview(data)
-      setPreviewPosition({ x: e.clientX, y: e.clientY - 20 })
-      setIsPreviewVisible(true)
+      setActivePreview(data);
+      setPreviewPosition({ x: e.clientX, y: e.clientY - 20 });
+      setIsPreviewVisible(true);
     }
-  }
+  };
 
   const handleHoverMove = (e: React.MouseEvent) => {
-    setPreviewPosition({ x: e.clientX, y: e.clientY - 20 })
-  }
+    setPreviewPosition({ x: e.clientX, y: e.clientY + 10 });
+  };
 
   const handleHoverEnd = () => {
-    setIsPreviewVisible(false)
-    setActivePreview(null)
-  }
+    setIsPreviewVisible(false);
+    setActivePreview(null);
+  };
 
   return {
     cardRef,
@@ -120,5 +125,5 @@ export function useHoverPreview(previewData: Record<string, PreviewData>) {
     handleHoverStart,
     handleHoverMove,
     handleHoverEnd,
-  }
+  };
 }

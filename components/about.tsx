@@ -13,20 +13,17 @@ import {
 
 const aboutPreviewData: Record<string, PreviewData> = {
   engineer: {
-    image:
-      "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=560&h=320&fit=crop",
-    title: "Software Engineering",
-    subtitle: "Building things that matter",
+    image: "/images/netflix.avif",
+    title: "Movies & TV",
+    subtitle: "Love watching movies, TV shows, and anime.",
   },
   craft: {
-    image:
-      "https://images.unsplash.com/photo-1618788372246-79faff0c3742?w=560&h=320&fit=crop",
-    title: "Attention to Detail",
-    subtitle: "From architecture to the last pixel",
+    image: "/images/curry.jpg",
+    title: "Basketball",
+    subtitle: "Prioritize playing basketball rather than studying for exams.",
   },
   building: {
-    image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=560&h=320&fit=crop",
+    image: "/images/curry.jpg",
     title: "Current Projects",
     subtitle: "Always shipping something new",
   },
@@ -93,13 +90,13 @@ export function About() {
           >
             {/* First paragraph with MagicText */}
             <MagicText
-              text="I'm a software engineer who loves turning complex problems into clean, elegant solutions. I care deeply about the craft — from system architecture down to the last pixel."
-              className="text-lg leading-relaxed"
+              text="Hi, I'm Shivain! As an engineering student, I’ve always been fascinated by how hardware and software work together to solve complex problems. Whether I'm diving into robotics or web development, I’m constantly looking for new things to learn and interesting people to meet."
+              className="text-xl leading-relaxed"
             />
 
             {/* Second paragraph with hover previews */}
-            <p className="text-foreground-muted leading-relaxed flex flex-wrap items-baseline gap-x-1">
-              <span>{"I'm a "}</span>
+            <p className="text-foreground-muted text-xl leading-relaxed flex flex-wrap items-baseline gap-x-1">
+              <span>{"My hobbies include "}</span>
               <HoverLink
                 previewKey="engineer"
                 onHoverStart={handleHoverStart}
@@ -108,10 +105,10 @@ export function About() {
                 className="cursor-pointer"
               >
                 <span className="text-primary font-medium border-b border-primary/30 hover:border-primary transition-colors">
-                  software engineer
+                  watching movies
                 </span>
               </HoverLink>
-              <span>{" who cares deeply about the "}</span>
+              <span>{", "}</span>
               <HoverLink
                 previewKey="craft"
                 onHoverStart={handleHoverStart}
@@ -120,10 +117,10 @@ export function About() {
                 className="cursor-pointer"
               >
                 <span className="text-primary font-medium border-b border-primary/30 hover:border-primary transition-colors">
-                  craft
+                  playing basketball
                 </span>
               </HoverLink>
-              <span>{". Currently "}</span>
+              <span>{", and "}</span>
               <HoverLink
                 previewKey="building"
                 onHoverStart={handleHoverStart}
@@ -132,13 +129,11 @@ export function About() {
                 className="cursor-pointer"
               >
                 <span className="text-primary font-medium border-b border-primary/30 hover:border-primary transition-colors">
-                  building
+                  going to the gym.
                 </span>
               </HoverLink>
               <span>
-                {
-                  " interesting things, and always open to new conversations and collaborations."
-                }
+                {" Thanks for stopping by to check out my portfolio!"}
               </span>
             </p>
           </motion.div>
