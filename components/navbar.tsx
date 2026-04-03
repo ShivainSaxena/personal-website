@@ -69,7 +69,7 @@ export function Navbar() {
             boxShadow: scrolled
               ? "0 4px 32px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.05)"
               : "none",
-            width: scrolled ? "auto" : "100%",
+            width: scrolled ? "270px" : "100%",
           }}
           transition={scrollSpring}
         >
