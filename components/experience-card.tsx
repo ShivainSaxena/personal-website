@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useSpring } from "framer-motion";
+import { useEffect, useState } from "react";
 import type { Experience } from "@/data/experience";
 
 interface ExperienceCardProps {
@@ -9,10 +10,12 @@ interface ExperienceCardProps {
   isInView: boolean;
 }
 
-// Slight rotation alternates per card for a natural "pinned" look
+// Resting tilt per card — same vibe as your original
 const rotations = [-1.5, 1.2, -0.8, 1.8, -1.2, 0.9];
 
-// Top strip accent colors — blue tones that match the palette
+// Starting swing direction alternates so adjacent cards swing opposite ways
+const swingStart = [22, -22, 18, -18, 20, -20];
+
 const accentColors = [
   "bg-blue-500",
   "bg-blue-400",
@@ -22,111 +25,146 @@ const accentColors = [
   "bg-cyan-500",
 ];
 
+const pinColors = [
+  "#3b82f6",
+  "#60a5fa",
+  "#0ea5e9",
+  "#6366f1",
+  "#2563eb",
+  "#06b6d4",
+];
+
 export function ExperienceCard({
   experience,
   index,
   isInView,
 }: ExperienceCardProps) {
-  const rotation = rotations[index % rotations.length];
+  const restingRotation = rotations[index % rotations.length];
   const accent = accentColors[index % accentColors.length];
+  const pinColor = pinColors[index % pinColors.length];
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  // Spring that drives the pendulum — low stiffness = slow, satisfying swing
+  const tiltSpring = useSpring(restingRotation, {
+    stiffness: 45,
+    damping: 7,
+    mass: 1.4,
+  });
+
+  useEffect(() => {
+    if (isInView && !hasAnimated) {
+      setHasAnimated(true);
+
+      // Instantly place at the big starting angle (no animation for this jump)
+      tiltSpring.jump(swingStart[index % swingStart.length]);
+
+      // Then spring toward the resting rotation — pendulum decay plays out
+      setTimeout(() => tiltSpring.set(restingRotation), 30);
+    }
+  }, [isInView, hasAnimated, index, tiltSpring, restingRotation]);
 
   return (
+    // Outer wrapper: drop-in from above (y + opacity + scale)
+    // pt-10 gives headroom for the pin + wire that sit above the card edge
     <motion.div
-      initial={{ opacity: 0, y: 60, rotate: rotation * 2, scale: 0.9 }}
-      animate={
-        isInView
-          ? {
-              opacity: 1,
-              y: 0,
-              rotate: rotation,
-              scale: 1,
-            }
-          : {}
-      }
+      className="relative pt-10"
+      initial={{ opacity: 0, y: -70, scale: 0.92 }}
+      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
       transition={{
-        duration: 0.6,
-        delay: index * 0.12,
-        ease: [0.34, 1.56, 0.64, 1], // spring overshoot
+        delay: index * 0.13,
+        duration: 0.55,
+        ease: [0.34, 1.56, 0.64, 1],
       }}
-      whileHover={{
-        rotate: 0,
-        scale: 1.02,
-        y: -4,
-        transition: { duration: 0.25, ease: "easeOut" },
-      }}
-      className="relative cursor-default"
     >
-      {/* Pin dot at top center */}
-      <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-background-surface border-2 border-primary/40 shadow-md z-10" />
-
-      {/* Card body */}
-      <div
-        className="bg-background-surface/95 rounded-lg overflow-hidden"
-        style={{
-          boxShadow: "4px 6px 24px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.2)",
-        }}
-      >
-        {/* Colored top strip */}
-        <div className={`h-2 w-full ${accent}`} />
-
-        <div className="p-6">
-          {/* Date badge — handwritten style, floated right */}
-          <div className="float-right ml-4 mb-2">
-            <span
-              className="inline-block px-3 py-1 text-xs text-primary bg-primary/10 border border-primary/20 rounded-sm font-handwriting"
-              style={{
-                fontSize: "0.85rem",
-                transform: "rotate(2deg)",
-                display: "block",
-              }}
-            >
-              {experience.startDate} → {experience.endDate}
-            </span>
-          </div>
-
-          {/* Company name — handwriting font */}
-          <h3 className="text-foreground text-2xl font-bold leading-tight mb-1 font-handwriting">
-            {experience.company}
-          </h3>
-
-          {/* Role — smaller, accent color, still handwritten */}
-          <p className="text-primary text-lg mb-4 font-handwriting">
-            {experience.role}
-          </p>
-
-          {/* Divider — looks like a pencil underline */}
-          <div className="h-px bg-gradient-to-r from-primary/40 via-primary/20 to-transparent mb-4" />
-
-          {/* Description bullets */}
-          <ul className="space-y-1.5 mb-4 clear-both">
-            {experience.description.map((item, i) => (
-              <li
-                key={i}
-                className="text-foreground-muted text-sm leading-relaxed flex gap-2"
-              >
-                <span className="text-primary mt-1.5 flex-shrink-0 text-xs">
-                  &#9670;
-                </span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-
-          {/* Tech tags */}
-          {/* {experience.technologies && (
-            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-border/40">
-              {experience.technologies.map((tech) => (
-                <span
-                  key={tech}
-                  className="px-2 py-0.5 text-xs font-mono text-primary/80 bg-primary/5 border border-primary/15 rounded"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          )} */}
-        </div>
+      {/* ── Fixed pin — stays centered, does NOT swing ── */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
+        {/* Pin head */}
+        <div
+          className="w-4 h-4 rounded-full border-2 border-white/20"
+          style={{
+            background: `radial-gradient(circle at 35% 35%, white 0%, ${pinColor} 55%)`,
+            boxShadow: `0 2px 8px ${pinColor}99, 0 0 0 1px ${pinColor}44`,
+          }}
+        />
+        {/* String */}
+        <div
+          className="w-[2px] h-8 rounded-full"
+          style={{
+            background: `linear-gradient(to bottom, ${pinColor}cc, ${pinColor}22)`,
+          }}
+        />
       </div>
+
+      {/* ── Pendulum wrapper — card + string rotate from pin point ── */}
+      <motion.div
+        style={{
+          rotate: tiltSpring,
+          transformOrigin: "top center",
+        }}
+        whileHover={{
+          rotate: 0,
+          scale: 1.02,
+          y: -4,
+          transition: { duration: 0.25, ease: "easeOut" },
+        }}
+        className="relative cursor-default"
+      >
+        {/* Card body — same markup/classes as your original */}
+        <div
+          className="bg-background-surface/95 rounded-lg overflow-hidden"
+          style={{
+            boxShadow:
+              "4px 6px 24px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.2)",
+          }}
+        >
+          {/* Colored top strip */}
+          <div className={`h-2 w-full ${accent}`} />
+
+          <div className="p-6">
+            {/* Date badge */}
+            <div className="float-right ml-4 mb-2">
+              <span
+                className="inline-block px-3 py-1 text-xs text-primary bg-primary/10 border border-primary/20 rounded-sm font-handwriting"
+                style={{
+                  fontSize: "0.85rem",
+                  transform: "rotate(2deg)",
+                  display: "block",
+                }}
+              >
+                {experience.startDate} → {experience.endDate}
+              </span>
+            </div>
+
+            {/* Company */}
+            <h3 className="text-foreground text-2xl font-bold leading-tight mb-1 font-handwriting">
+              {experience.company}
+            </h3>
+
+            {/* Role */}
+            <p className="text-primary text-lg mb-4 font-handwriting">
+              {experience.role}
+            </p>
+
+            {/* Pencil-line divider */}
+            <div className="h-px bg-gradient-to-r from-primary/40 via-primary/20 to-transparent mb-4" />
+
+            {/* Bullets */}
+            <ul className="space-y-1.5 mb-4 clear-both">
+              {experience.description.map((item, i) => (
+                <li
+                  key={i}
+                  className="text-foreground-muted text-sm leading-relaxed flex gap-2"
+                >
+                  <span className="text-primary mt-1.5 flex-shrink-0 text-xs">
+                    &#9670;
+                  </span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </motion.div>
     </motion.div>
   );
 }
