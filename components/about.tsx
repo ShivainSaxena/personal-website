@@ -23,9 +23,9 @@ const aboutPreviewData: Record<string, PreviewData> = {
     subtitle: "Prioritize playing basketball rather than studying for exams.",
   },
   building: {
-    image: "/images/curry.jpg",
-    title: "Current Projects",
-    subtitle: "Always shipping something new",
+    image: "/images/dumbell.webp",
+    title: "Gym",
+    subtitle: "Try to go 3-4 times a week and like going with my friends.",
   },
 };
 
