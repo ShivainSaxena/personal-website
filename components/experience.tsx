@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { experiences } from "@/data/experience";
 import { ExperienceCard } from "./experience-card";
 import { BGPattern } from "@/components/ui/bg-pattern";
+import { ExperienceBlobs } from "./experience-blobs";
 
 export function Experience() {
   const ref = useRef(null);
@@ -22,6 +23,8 @@ export function Experience() {
         size={40}
         fill="rgba(59, 130, 246, 0.18)"
       />
+
+      <ExperienceBlobs />
 
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-background via-transparent to-background" />
 

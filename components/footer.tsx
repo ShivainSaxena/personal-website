@@ -22,7 +22,7 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-background min-h-[280px] -mt-14 pt-24">
+    <footer className="relative overflow-hidden bg-background min-h-[280px] pt-24">
       {/* Ethereal animated shadow background */}
       <EtherealShadow
         color="rgba(59, 130, 246, 0.55)"
