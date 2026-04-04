@@ -1,40 +1,48 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import type { Experience } from "@/data/experience"
+import { motion } from "framer-motion";
+import type { Experience } from "@/data/experience";
 
 interface ExperienceCardProps {
-  experience: Experience
-  index: number
-  isInView: boolean
+  experience: Experience;
+  index: number;
+  isInView: boolean;
 }
 
 // Slight rotation alternates per card for a natural "pinned" look
-const rotations = [-1.5, 1.2, -0.8, 1.8, -1.2, 0.9]
+const rotations = [-1.5, 1.2, -0.8, 1.8, -1.2, 0.9];
 
 // Top strip accent colors — blue tones that match the palette
 const accentColors = [
-  'bg-blue-500',
-  'bg-blue-400',
-  'bg-sky-500',
-  'bg-indigo-500',
-  'bg-blue-600',
-  'bg-cyan-500',
-]
+  "bg-blue-500",
+  "bg-blue-400",
+  "bg-sky-500",
+  "bg-indigo-500",
+  "bg-blue-600",
+  "bg-cyan-500",
+];
 
-export function ExperienceCard({ experience, index, isInView }: ExperienceCardProps) {
-  const rotation = rotations[index % rotations.length]
-  const accent = accentColors[index % accentColors.length]
+export function ExperienceCard({
+  experience,
+  index,
+  isInView,
+}: ExperienceCardProps) {
+  const rotation = rotations[index % rotations.length];
+  const accent = accentColors[index % accentColors.length];
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 60, rotate: rotation * 2, scale: 0.9 }}
-      animate={isInView ? {
-        opacity: 1,
-        y: 0,
-        rotate: rotation,
-        scale: 1,
-      } : {}}
+      animate={
+        isInView
+          ? {
+              opacity: 1,
+              y: 0,
+              rotate: rotation,
+              scale: 1,
+            }
+          : {}
+      }
       transition={{
         duration: 0.6,
         delay: index * 0.12,
@@ -55,7 +63,7 @@ export function ExperienceCard({ experience, index, isInView }: ExperienceCardPr
       <div
         className="bg-background-surface/95 rounded-lg overflow-hidden"
         style={{
-          boxShadow: '4px 6px 24px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.2)',
+          boxShadow: "4px 6px 24px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.2)",
         }}
       >
         {/* Colored top strip */}
@@ -67,9 +75,9 @@ export function ExperienceCard({ experience, index, isInView }: ExperienceCardPr
             <span
               className="inline-block px-3 py-1 text-xs text-primary bg-primary/10 border border-primary/20 rounded-sm font-handwriting"
               style={{
-                fontSize: '0.85rem',
-                transform: 'rotate(2deg)',
-                display: 'block',
+                fontSize: "0.85rem",
+                transform: "rotate(2deg)",
+                display: "block",
               }}
             >
               {experience.startDate} → {experience.endDate}
@@ -77,16 +85,12 @@ export function ExperienceCard({ experience, index, isInView }: ExperienceCardPr
           </div>
 
           {/* Company name — handwriting font */}
-          <h3
-            className="text-foreground text-2xl font-bold leading-tight mb-1 font-handwriting"
-          >
+          <h3 className="text-foreground text-2xl font-bold leading-tight mb-1 font-handwriting">
             {experience.company}
           </h3>
 
           {/* Role — smaller, accent color, still handwritten */}
-          <p
-            className="text-primary text-lg mb-4 font-handwriting"
-          >
+          <p className="text-primary text-lg mb-4 font-handwriting">
             {experience.role}
           </p>
 
@@ -100,14 +104,16 @@ export function ExperienceCard({ experience, index, isInView }: ExperienceCardPr
                 key={i}
                 className="text-foreground-muted text-sm leading-relaxed flex gap-2"
               >
-                <span className="text-primary mt-1.5 flex-shrink-0 text-xs">&#9670;</span>
+                <span className="text-primary mt-1.5 flex-shrink-0 text-xs">
+                  &#9670;
+                </span>
                 <span>{item}</span>
               </li>
             ))}
           </ul>
 
           {/* Tech tags */}
-          {experience.technologies && (
+          {/* {experience.technologies && (
             <div className="flex flex-wrap gap-1.5 pt-2 border-t border-border/40">
               {experience.technologies.map((tech) => (
                 <span
@@ -118,9 +124,9 @@ export function ExperienceCard({ experience, index, isInView }: ExperienceCardPr
                 </span>
               ))}
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </motion.div>
-  )
+  );
 }
