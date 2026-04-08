@@ -1,18 +1,19 @@
 export interface Project {
-  id: string
-  name: string
-  description: string
-  technologies: string[]
-  githubUrl: string
-  liveUrl?: string
-  gradient: string
+  id: string;
+  name: string;
+  description: string;
+  technologies: string[];
+  githubUrl: string;
+  liveUrl?: string;
+  gradient: string;
 }
 
 export const projects: Project[] = [
   {
     id: "proj-1",
-    name: "CloudSync Dashboard",
-    description: "A real-time analytics dashboard for monitoring cloud infrastructure. Features interactive charts, alerting systems, and team collaboration tools.",
+    name: "FleetCommand",
+    description:
+      "A real-time analytics dashboard for monitoring cloud infrastructure. Features interactive charts, alerting systems, and team collaboration tools.",
     technologies: ["React", "TypeScript", "D3.js", "WebSocket", "Node.js"],
     githubUrl: "https://github.com/username/cloudsync-dashboard",
     liveUrl: "https://cloudsync-demo.vercel.app",
@@ -20,8 +21,9 @@ export const projects: Project[] = [
   },
   {
     id: "proj-2",
-    name: "TaskFlow",
-    description: "A minimalist project management app with drag-and-drop functionality, real-time updates, and integrations with popular productivity tools.",
+    name: "Verity",
+    description:
+      "A minimalist project management app with drag-and-drop functionality, real-time updates, and integrations with popular productivity tools.",
     technologies: ["Next.js", "Prisma", "PostgreSQL", "Tailwind CSS"],
     githubUrl: "https://github.com/username/taskflow",
     liveUrl: "https://taskflow-app.vercel.app",
@@ -29,36 +31,21 @@ export const projects: Project[] = [
   },
   {
     id: "proj-3",
-    name: "AI Writing Assistant",
-    description: "An intelligent writing companion that helps users improve their content with grammar suggestions, tone analysis, and style recommendations.",
+    name: "StockSense",
+    description:
+      "An intelligent writing companion that helps users improve their content with grammar suggestions, tone analysis, and style recommendations.",
     technologies: ["Python", "FastAPI", "OpenAI API", "React"],
     githubUrl: "https://github.com/username/ai-writing-assistant",
     gradient: "from-emerald-600 to-teal-500",
   },
   {
     id: "proj-4",
-    name: "DevPortfolio",
-    description: "A customizable portfolio template for developers. Features dark mode, animations, and easy content management through markdown files.",
+    name: "LaunchSTEM",
+    description:
+      "A customizable portfolio template for developers. Features dark mode, animations, and easy content management through markdown files.",
     technologies: ["Next.js", "MDX", "Framer Motion", "Tailwind CSS"],
     githubUrl: "https://github.com/username/devportfolio",
     liveUrl: "https://devportfolio-template.vercel.app",
     gradient: "from-rose-600 to-pink-500",
   },
-  {
-    id: "proj-5",
-    name: "CryptoTracker",
-    description: "A cryptocurrency portfolio tracker with real-time price updates, historical charts, and personalized alerts for price movements.",
-    technologies: ["React Native", "Redux", "Chart.js", "CoinGecko API"],
-    githubUrl: "https://github.com/username/cryptotracker",
-    gradient: "from-amber-600 to-orange-500",
-  },
-  {
-    id: "proj-6",
-    name: "CodeCollab",
-    description: "A real-time collaborative code editor with syntax highlighting, live cursors, and integrated video chat for pair programming sessions.",
-    technologies: ["Socket.io", "Monaco Editor", "WebRTC", "Express"],
-    githubUrl: "https://github.com/username/codecollab",
-    liveUrl: "https://codecollab-live.vercel.app",
-    gradient: "from-violet-600 to-indigo-500",
-  },
-]
+];

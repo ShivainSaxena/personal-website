@@ -5,6 +5,7 @@ import { motion, useInView } from "framer-motion";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ProjectCard } from "@/components/project-card";
+import { BGPattern } from "@/components/ui/bg-pattern";
 import { projects } from "@/data/projects";
 
 export default function ProjectsPage() {
@@ -53,8 +54,14 @@ export default function ProjectsPage() {
       </section>
 
       {/* Projects Grid */}
-      <section className="py-16 px-6" ref={ref}>
-        <div className="max-w-6xl mx-auto">
+      <section className="relative py-16 px-6 overflow-hidden" ref={ref}>
+        <BGPattern
+          variant="grid"
+          mask="fade-edges"
+          size={32}
+          fill="rgba(59, 130, 246, 0.25)"
+        />
+        <div className="relative max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-6">
             {projects.map((project, index) => (
               <ProjectCard
