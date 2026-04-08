@@ -37,6 +37,9 @@ const GlowCard: React.FC<GlowCardProps> = ({
   const innerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const isTouchDevice = window.matchMedia("(hover: none)").matches;
+    if (isTouchDevice) return;
+
     let ready = false;
     const syncPointer = (e: PointerEvent) => {
       const { clientX: x, clientY: y } = e;
@@ -94,7 +97,7 @@ const GlowCard: React.FC<GlowCardProps> = ({
       backgroundAttachment: "fixed",
       border: "var(--border-size) solid var(--backup-border)",
       position: "relative",
-      touchAction: "none",
+      touchAction: "auto",
     };
 
     if (width !== undefined) {
