@@ -3,9 +3,9 @@ export interface Project {
   name: string;
   description: string;
   technologies: string[];
-  githubUrl: string;
+  githubUrl?: string;
   liveUrl?: string;
-  gradient: string;
+  image: string;
 }
 
 export const projects: Project[] = [
@@ -13,11 +13,17 @@ export const projects: Project[] = [
     id: "proj-1",
     name: "FleetCommand",
     description:
-      "A real-time analytics dashboard for monitoring cloud infrastructure. Features interactive charts, alerting systems, and team collaboration tools.",
-    technologies: ["React", "TypeScript", "D3.js", "WebSocket", "Node.js"],
-    githubUrl: "https://github.com/username/cloudsync-dashboard",
-    liveUrl: "https://cloudsync-demo.vercel.app",
-    gradient: "from-blue-600 to-cyan-500",
+      "A real-time maritime monitoring platform that streams and analyzes live telemetry data from vessel sensors. It provides a dashboard for tracking critical vessel metrics and to ensure high-precision situational awareness.",
+    technologies: [
+      "Next.js",
+      "FastAPI",
+      "TimescaleDB",
+      "Docker",
+      "Supabase",
+      "MQTT",
+    ],
+    liveUrl: "http://18.222.214.9:3000/auth/login",
+    image: "/images/fleetcommandd.png",
   },
   {
     id: "proj-2",
@@ -27,7 +33,7 @@ export const projects: Project[] = [
     technologies: ["Next.js", "Prisma", "PostgreSQL", "Tailwind CSS"],
     githubUrl: "https://github.com/username/taskflow",
     liveUrl: "https://taskflow-app.vercel.app",
-    gradient: "from-indigo-600 to-purple-500",
+    image: "/images/verity.png",
   },
   {
     id: "proj-3",
@@ -36,7 +42,7 @@ export const projects: Project[] = [
       "An intelligent writing companion that helps users improve their content with grammar suggestions, tone analysis, and style recommendations.",
     technologies: ["Python", "FastAPI", "OpenAI API", "React"],
     githubUrl: "https://github.com/username/ai-writing-assistant",
-    gradient: "from-emerald-600 to-teal-500",
+    image: "/images/stocksense.png",
   },
   {
     id: "proj-4",
@@ -46,6 +52,6 @@ export const projects: Project[] = [
     technologies: ["Next.js", "MDX", "Framer Motion", "Tailwind CSS"],
     githubUrl: "https://github.com/username/devportfolio",
     liveUrl: "https://devportfolio-template.vercel.app",
-    gradient: "from-rose-600 to-pink-500",
+    image: "/images/launchstem.png",
   },
 ];

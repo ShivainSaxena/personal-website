@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Github, ExternalLink } from "lucide-react";
 import type { Project } from "@/data/projects";
@@ -23,11 +24,14 @@ export function ProjectCard({ project, index, isInView }: ProjectCardProps) {
         customSize
         className="w-full group bg-background-surface transition-all duration-300"
       >
-        {/* Preview Gradient */}
-        <div
-          className={`h-40 bg-gradient-to-br ${project.gradient} opacity-80 rounded-xl overflow-hidden`}
-        >
-          <div className="w-full h-full bg-background/20 backdrop-blur-[1px]" />
+        {/* Preview Image */}
+        <div className="relative h-42 rounded-xl overflow-hidden">
+          <Image
+            src={project.image}
+            alt={project.name}
+            fill
+            className="object-fill"
+          />
         </div>
 
         {/* Card Body */}
@@ -53,15 +57,17 @@ export function ProjectCard({ project, index, isInView }: ProjectCardProps) {
 
           {/* Links */}
           <div className="flex items-center gap-4">
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm text-foreground-muted hover:text-primary transition-colors"
-            >
-              <Github className="w-4 h-4" />
-              <span>View Code</span>
-            </a>
+            {project.githubUrl && (
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-foreground-muted hover:text-primary transition-colors"
+              >
+                <Github className="w-4 h-4" />
+                <span>View Code</span>
+              </a>
+            )}
             {project.liveUrl && (
               <a
                 href={project.liveUrl}
