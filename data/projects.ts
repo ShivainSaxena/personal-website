@@ -31,17 +31,17 @@ export const projects: Project[] = [
     description:
       "An AI-powered market intelligence platform that automates complex company research by executing parallel web searches to synthesize structured briefs. Utilizing a multi-stage pipeline to transform raw data into intelligent reports.",
     technologies: ["Node.js", "Claude", "Redis", "Exa API"],
-    githubUrl: "https://github.com/username/taskflow",
-    liveUrl: "https://taskflow-app.vercel.app",
+    githubUrl: "https://github.com/jayyy044/Verity-Intelligence",
     image: "/images/verity.png",
   },
   {
     id: "proj-3",
     name: "StockSense",
     description:
-      "An intelligent writing companion that helps users improve their content with grammar suggestions, tone analysis, and style recommendations.",
-    technologies: ["Python", "FastAPI", "OpenAI API", "React"],
-    githubUrl: "https://github.com/username/ai-writing-assistant",
+      "A financial analysis application designed to provide users with data-driven stock market insights and future price trend predictions. Integrates automated data collection from external financial sources to help investors.",
+    technologies: ["Python", "Javascript", "Selenium", "AWS", "MongoDB"],
+    githubUrl: "https://github.com/ShivainSaxena/StockSense",
+    liveUrl: "https://stocksensedev.netlify.app/",
     image: "/images/stocksense.png",
   },
   {
