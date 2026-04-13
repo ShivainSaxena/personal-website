@@ -29,8 +29,8 @@ export const projects: Project[] = [
     id: "proj-2",
     name: "Verity",
     description:
-      "A minimalist project management app with drag-and-drop functionality, real-time updates, and integrations with popular productivity tools.",
-    technologies: ["Next.js", "Prisma", "PostgreSQL", "Tailwind CSS"],
+      "An AI-powered market intelligence platform that automates complex company research by executing parallel web searches to synthesize structured briefs. Utilizing a multi-stage pipeline to transform raw data into intelligent reports.",
+    technologies: ["Node.js", "Claude", "Redis", "Exa API"],
     githubUrl: "https://github.com/username/taskflow",
     liveUrl: "https://taskflow-app.vercel.app",
     image: "/images/verity.png",
