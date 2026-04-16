@@ -48,10 +48,10 @@ export const projects: Project[] = [
     id: "proj-4",
     name: "LaunchSTEM",
     description:
-      "A customizable portfolio template for developers. Features dark mode, animations, and easy content management through markdown files.",
-    technologies: ["Next.js", "MDX", "Framer Motion", "Tailwind CSS"],
-    githubUrl: "https://github.com/username/devportfolio",
-    liveUrl: "https://devportfolio-template.vercel.app",
+      "An educational website and integrated learning platform designed to deliver structured content to students. The platform provides an interface with optimized page delivery and an infrastructure for quizzes and PDF lessons.",
+    technologies: ["React.js", "MongoDB", "Redis", "Mailchimp"],
+    githubUrl: "https://github.com/ShivainSaxena/launchstem-learn",
+    liveUrl: "https://learn.launchstem.org/",
     image: "/images/launchstem.png",
   },
 ];
